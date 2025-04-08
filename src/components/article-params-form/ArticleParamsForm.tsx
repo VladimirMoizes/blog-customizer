@@ -12,11 +12,13 @@ import {
 	fontSizeOptions,
 	OptionType,
 } from 'src/constants/articleProps';
-import { SyntheticEvent, useState } from 'react';
+import { SyntheticEvent, useRef, useState } from 'react';
 import clsx from 'clsx';
 import { Select } from 'src/ui/select';
 import { Separator } from 'src/ui/separator';
 import { RadioGroup } from 'src/ui/radio-group';
+import { useClickOverlay } from '../../hooks/useClickOverlay';
+import { Text } from '../../ui/text/Text';
 
 type ArticleParamsForm = {
 	stateArticle: ArticleStateType;
@@ -30,6 +32,8 @@ export const ArticleParamsForm = ({
 	const [stateParams, setStateParams] =
 		useState<ArticleStateType>(stateArticle);
 	const [isOpen, setIsOpen] = useState<boolean>(false);
+	const sidebarRef = useRef<HTMLElement>(null);
+
 	const handleSelectChange = (key: string, value: OptionType) => {
 		setStateParams({ ...stateParams, [key]: value });
 	};
@@ -42,6 +46,9 @@ export const ArticleParamsForm = ({
 		setStateParams(defaultArticleState);
 		setStateArticle(defaultArticleState);
 	};
+
+	useClickOverlay(sidebarRef, () => setIsOpen(false));
+
 	return (
 		<>
 			<ArrowButton
@@ -51,9 +58,15 @@ export const ArticleParamsForm = ({
 				}}
 			/>
 			<aside
+				ref={sidebarRef}
 				className={clsx(styles.container, isOpen && styles.container_open)}>
-				<form className={styles.form} onSubmit={handleSubmitForm}>
-					<h2 className={styles.form__title}>Задайте параметры</h2>
+				<form
+					className={styles.form}
+					onSubmit={handleSubmitForm}
+					onReset={handleResetForm}>
+					<Text as='h2' size={31} weight={800} family='open-sans' uppercase>
+						Задайте параметры
+					</Text>
 					<Select
 						selected={stateParams.fontFamilyOption}
 						options={fontFamilyOptions}
@@ -97,12 +110,7 @@ export const ArticleParamsForm = ({
 						title='Ширина контента'
 					/>
 					<div className={styles.bottomContainer}>
-						<Button
-							title='Сбросить'
-							htmlType='reset'
-							type='clear'
-							onClick={handleResetForm}
-						/>
+						<Button title='Сбросить' htmlType='reset' type='clear' />
 						<Button title='Применить' htmlType='submit' type='apply' />
 					</div>
 				</form>

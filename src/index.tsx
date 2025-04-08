@@ -4,7 +4,10 @@ import clsx from 'clsx';
 
 import { Article } from './components/article/Article';
 import { ArticleParamsForm } from './components/article-params-form/ArticleParamsForm';
-import { ArticleStateType, defaultArticleState } from './constants/articleProps';
+import {
+	ArticleStateType,
+	defaultArticleState,
+} from './constants/articleProps';
 
 import './styles/index.scss';
 import styles from './styles/index.module.scss';
@@ -13,20 +16,24 @@ const domNode = document.getElementById('root') as HTMLDivElement;
 const root = createRoot(domNode);
 
 const App = () => {
-	const [state, setState] = useState<ArticleStateType>(defaultArticleState);
+	const [stateCurrentApp, setStateCurrentApp] =
+		useState<ArticleStateType>(defaultArticleState);
 	return (
 		<main
-			className={clsx(styles.main)}
+			className={styles.main}
 			style={
 				{
-					'--font-family': state.fontFamilyOption.value,
-					'--font-size': state.fontSizeOption.value,
-					'--font-color': state.fontColor.value,
-					'--container-width': state.contentWidth.value,
-					'--bg-color': state.backgroundColor.value,
+					'--font-family': stateCurrentApp.fontFamilyOption.value,
+					'--font-size': stateCurrentApp.fontSizeOption.value,
+					'--font-color': stateCurrentApp.fontColor.value,
+					'--container-width': stateCurrentApp.contentWidth.value,
+					'--bg-color': stateCurrentApp.backgroundColor.value,
 				} as CSSProperties
 			}>
-			<ArticleParamsForm stateArticle={state} setStateArticle={setState} />
+			<ArticleParamsForm
+				stateArticle={stateCurrentApp}
+				setStateArticle={setStateCurrentApp}
+			/>
 			<Article />
 		</main>
 	);

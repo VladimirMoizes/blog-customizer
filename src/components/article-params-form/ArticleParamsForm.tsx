@@ -47,7 +47,7 @@ export const ArticleParamsForm = ({
 		setStateArticle(defaultArticleState);
 	};
 
-	useClickOverlay(sidebarRef, () => setIsOpen(false));
+	useClickOverlay(sidebarRef, () => setIsOpen(false), isOpen);
 
 	return (
 		<>
